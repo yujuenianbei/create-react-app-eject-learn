@@ -35,8 +35,9 @@ const openBrowser = require('react-dev-utils/openBrowser');
 const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
-
+// 判断yarnlock文件是否存在
 const useYarn = fs.existsSync(paths.yarnLockFile);
+// 验证文本终端是否可用
 const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
@@ -44,11 +45,9 @@ const isInteractive = process.stdout.isTTY;
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
-process.exit(1);
 // Tools like Cloud9 rely on this.
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
-
 if (process.env.HOST) {
   console.log(
     chalk.cyan(
@@ -69,6 +68,7 @@ if (process.env.HOST) {
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
 const { checkBrowsers } = require('react-dev-utils/browsersHelper');
+// 
 checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
     // We attempt to use the default port but if it is busy, we offer the user to
@@ -76,11 +76,12 @@ checkBrowsers(paths.appPath, isInteractive)
     return choosePort(HOST, DEFAULT_PORT);
   })
   .then(port => {
+    console.log(chalk.green(port))
     if (port == null) {
       // We have not found a port.
       return;
     }
-
+    process.exit(1);
     const config = configFactory('development');
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
     const appName = require(paths.appPackageJson).name;
